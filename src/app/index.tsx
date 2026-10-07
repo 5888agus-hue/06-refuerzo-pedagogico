@@ -5,11 +5,12 @@
  * ============================================================================
  */
 
+import { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { BotonContador } from '@/components/BotonContador';
 import { ContadorDisplay } from '@/components/ContadorDisplay';
 import { calcularValor, estadoUI, type ContadorConfig } from '@/domain/counter';
-import { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function Home() {
   // --------------------------------------------------------------------------
