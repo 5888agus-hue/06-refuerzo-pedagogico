@@ -5,62 +5,61 @@
  * ============================================================================
  */
 
-import { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BotonContador } from '@/components/BotonContador';
 import { ContadorDisplay } from '@/components/ContadorDisplay';
 import { calcularValor, estadoUI, type ContadorConfig } from '@/domain/counter';
+import { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function Home() {
   // --------------------------------------------------------------------------
-  // 1. CONTADOR 1: SANDUCHES
+  // 1. CONTADOR PRINCIPAL (Sanduches) — Requerido para la prueba automatizada
   // --------------------------------------------------------------------------
-  const [sanduches, setSanduches] = useState(0);
-  const configSanduches: ContadorConfig = { valor: sanduches, paso: 1, minimo: 0, maximo: 10 };
-  const estadoSanduches = estadoUI(sanduches, configSanduches);
+  const [valor, setValor] = useState(0);
+  const config: ContadorConfig = { valor, paso: 1, minimo: 0, maximo: 10 };
+  const estado = estadoUI(valor, config);
 
-  const incrementarSanduches = () => {
-    setSanduches(calcularValor('incrementar', configSanduches));
-  };
-  const decrementarSanduches = () => {
-    setSanduches(calcularValor('decrementar', configSanduches));
-  };
-  const reiniciarSanduches = () => {
-    setSanduches(calcularValor('reiniciar', configSanduches));
+  const incrementar = () => {
+    setValor(calcularValor(config, 'incrementar'));
   };
 
+  const decrementar = () => {
+    setValor(calcularValor(config, 'decrementar'));
+  };
+
+  const reiniciar = () => {
+    setValor(0);
+  };
+
   // --------------------------------------------------------------------------
-  // 2. CONTADOR 2: EMPANADAS (Integrador)
+  // 2. CONTADORES ADICIONALES (Integrador: Empanadas y Jugos)
   // --------------------------------------------------------------------------
   const [empanadas, setEmpanadas] = useState(0);
   const configEmpanadas: ContadorConfig = { valor: empanadas, paso: 1, minimo: 0, maximo: 10 };
   const estadoEmpanadas = estadoUI(empanadas, configEmpanadas);
 
   const incrementarEmpanadas = () => {
-    setEmpanadas(calcularValor('incrementar', configEmpanadas));
+    setEmpanadas(calcularValor(configEmpanadas, 'incrementar'));
   };
   const decrementarEmpanadas = () => {
-    setEmpanadas(calcularValor('decrementar', configEmpanadas));
+    setEmpanadas(calcularValor(configEmpanadas, 'decrementar'));
   };
   const reiniciarEmpanadas = () => {
-    setEmpanadas(calcularValor('reiniciar', configEmpanadas));
+    setEmpanadas(0);
   };
 
-  // --------------------------------------------------------------------------
-  // 3. CONTADOR 3: JUGOS (Integrador)
-  // --------------------------------------------------------------------------
   const [jugos, setJugos] = useState(0);
   const configJugos: ContadorConfig = { valor: jugos, paso: 1, minimo: 0, maximo: 10 };
   const estadoJugos = estadoUI(jugos, configJugos);
 
   const incrementarJugos = () => {
-    setJugos(calcularValor('incrementar', configJugos));
+    setJugos(calcularValor(configJugos, 'incrementar'));
   };
   const decrementarJugos = () => {
-    setJugos(calcularValor('decrementar', configJugos));
+    setJugos(calcularValor(configJugos, 'decrementar'));
   };
   const reiniciarJugos = () => {
-    setJugos(calcularValor('reiniciar', configJugos));
+    setJugos(0);
   };
 
   return (
@@ -68,25 +67,25 @@ export default function Home() {
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Bar Salesiano · Contadores</Text>
 
-        {/* --- CONTADOR: SANDUCHES --- */}
-        <ContadorDisplay valor={sanduches} etiqueta="Sanduches" />
+        {/* --- CONTADOR PRINCIPAL: SANDUCHES --- */}
+        <ContadorDisplay valor={valor} etiqueta="Sanduches" />
         <View style={styles.actions}>
           <BotonContador
             label="+1"
-            onPress={incrementarSanduches}
+            onPress={incrementar}
             variante="primary"
-            disabled={estadoSanduches === 'MAXIMO'}
+            disabled={estado === 'MAXIMO'}
           />
           <BotonContador
             label="-1"
-            onPress={decrementarSanduches}
+            onPress={decrementar}
             variante="secondary"
-            disabled={estadoSanduches === 'MINIMO'}
+            disabled={estado === 'MINIMO'}
           />
-          <BotonContador label="Reiniciar" onPress={reiniciarSanduches} variante="danger" />
+          <BotonContador label="Reiniciar" onPress={reiniciar} variante="danger" />
         </View>
 
-        {/* --- CONTADOR: EMPANADAS --- */}
+        {/* --- CONTADOR ADICIONAL: EMPANADAS --- */}
         <ContadorDisplay valor={empanadas} etiqueta="Empanadas" />
         <View style={styles.actions}>
           <BotonContador
@@ -104,7 +103,7 @@ export default function Home() {
           <BotonContador label="Reiniciar" onPress={reiniciarEmpanadas} variante="danger" />
         </View>
 
-        {/* --- CONTADOR: JUGOS --- */}
+        {/* --- CONTADOR ADICIONAL: JUGOS --- */}
         <ContadorDisplay valor={jugos} etiqueta="Jugos" />
         <View style={styles.actions}>
           <BotonContador
